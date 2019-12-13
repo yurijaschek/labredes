@@ -1,13 +1,10 @@
 #include <netinet/in.h>
-#include <pthread.h>
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
-
-
 
 int init_server(uint16_t port, int backlog)
 {
@@ -38,6 +35,14 @@ int init_server(uint16_t port, int backlog)
     return sockfd;
 }
 
+int listen_fd;
+
+void sig_handler(int signum)
+{
+    shutdown(listen_fd, SHUT_RDWR);
+    close(listen_fd);
+}
+
 int main(int argc, char *argv[])
 {
     if(argc != 2)
@@ -53,16 +58,15 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    int listen_fd = init_server(port, 16);
+    listen_fd = init_server(port, 16);
 
-    signal()
+    signal(SIGINT, sig_handler); // To shutdown the server with Ctrl-C
 
     for(;;) // Accepting connections
     {
+
     }
 
-    shutdown(listen_fd, SHUT_RDWR);
-    close(listen_fd);
 
     return 0;
 }
