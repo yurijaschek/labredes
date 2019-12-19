@@ -79,11 +79,11 @@ int main(int argc, char *argv[])
         uint64_t curr_time = get_posix_clock_time();
         nanoseconds += curr_time - prev_time;
         prev_time = curr_time;
-        if(nanoseconds >= 1000000000LL)
+        if(nanoseconds >= 100000000LL)
         {
-            printf("%d Mbps\n", (int)(bits/1000000));
+            printf("%d Mbps\n", (int)((10*bits)/1000000));
             bits = 0;
-            nanoseconds %= 1000000000LL;
+            nanoseconds %= 100000000LL;
         }
     }
 
